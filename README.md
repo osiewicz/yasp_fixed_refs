@@ -1,4 +1,5 @@
-# yasp
+# Yasp
+Yet another stupid project
 
 ## Project setup
 ```
