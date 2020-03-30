@@ -34,20 +34,21 @@
     </v-app-bar>
 
     <v-content>
-      <HelloWorld />
+      <TestComponent />
     </v-content>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+//import HelloWorld from "./components/HelloWorld.vue";
+import TestComponent from "./components/TestComponent.vue";
 
 export default Vue.extend({
   name: "App",
 
   components: {
-    HelloWorld
+    TestComponent
   },
 
   data: () => ({
