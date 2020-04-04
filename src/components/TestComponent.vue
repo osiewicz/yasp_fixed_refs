@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="note in notes" :key="note.id">
+    <div v-for="note in notess" :key="note.id">
       <span>Note</span><br />
       <span>Title: {{ note.title }}</span
       ><br />
@@ -23,7 +23,15 @@ import { mapGetters } from "vuex";
 export default Vue.extend({
   name: "TestComponent",
 
-  data: () => ({}),
-  computed: mapGetters(["notes"])
+  data() {
+    return {
+      testString: 1
+    };
+  },
+  computed: {
+    getNotes() {
+      return this.$store.state.notes;
+    }
+  }
 });
 </script>
