@@ -68,5 +68,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "prettier": {
+    "trailingComma": "none"
   }
 }
