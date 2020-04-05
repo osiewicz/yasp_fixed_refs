@@ -1,30 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { createNote, Note } from "@/models/note.model";
+import { Note } from "@/models/note.model";
 
 Vue.use(Vuex);
 
 export const getDefaultState = () => {
   return {
-    notes: []
+    notes: Array<Note>()
   };
 };
 
 export default new Vuex.Store({
   state: {
-    notes: [createNote(), createNote()]
+    notes: Array<Note>()
   },
-  actions: {
-    resetNotesState({ commit }) {
-      commit("resetState");
-    }
-  },
-  mutations: {
-    resetState: state => {
-      Object.assign(state, getDefaultState());
-    }
-  },
-  modules: {},
   getters: {
     notes: state => {
       return state.notes;
@@ -34,6 +23,41 @@ export default new Vuex.Store({
     },
     getNoteByIndex: state => (index: number) => {
       return state.notes[index];
+    },
+    getNoteById: state => (id: string) => {
+      return state.notes.find(note => note.id === id);
     }
-  }
+  },
+  mutations: {
+    resetState: state => {
+      Object.assign(state, getDefaultState());
+    },
+    addNote(state, note: Note) {
+      state.notes.push(note);
+    },
+    addMultipleNotes(state, notes: Note[]) {
+      state.notes = state.notes.concat(notes);
+    },
+    deleteNote(state, noteId: string) {
+      state.notes.splice(
+        state.notes.findIndex(note => note.id === noteId),
+        1
+      );
+    }
+  },
+  actions: {
+    resetNotesState({ commit }) {
+      commit("resetState");
+    },
+    commitNote({ commit }, note: Note) {
+      commit("addNote", note);
+    },
+    commitMultipleNotes({ commit }, notes: Note[]) {
+      commit("addMultipleNotes", notes);
+    },
+    commitDeleteNote({ commit }, noteId: string) {
+      commit("deleteNote", noteId);
+    }
+  },
+  modules: {}
 });
