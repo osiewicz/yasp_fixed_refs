@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      <input style="border: 1px solid black; margin: 5px" v-model="id" /><br />
+      <input style="border: 1px solid black; margin: 5px" v-model="id" />
+      <br />
       <button
         style="border: 1px solid black; margin: 5px; padding: 5px"
         v-on:click="commitDeleteNote(id)"
@@ -36,19 +37,21 @@
     <br />
     <span style="margin: 5px">Notes count: {{ getNotesCount }}</span>
     <div v-for="note in notes" :key="note.id">
-      <span>Note</span><br />
-      <span>Id: {{ note.id }}</span
-      ><br />
-      <span>Title: {{ note.title }}</span
-      ><br />
-      <span>Content :{{ note.content }}</span
-      ><br />
-      <span>Tags: {{ note.tags }}</span
-      ><br />
-      <span>When created: {{ note.whenCreated }}</span
-      ><br />
-      <span>When edited: {{ note.whenEdited }}</span
-      ><br /><br />
+      <span>Note</span>
+      <br />
+      <span>Id: {{ note.id }}</span>
+      <br />
+      <span>Title: {{ note.title }}</span>
+      <br />
+      <span>Content :{{ note.content }}</span>
+      <br />
+      <span>Tags: {{ note.tags }}</span>
+      <br />
+      <span>When created: {{ note.whenCreated }}</span>
+      <br />
+      <span>When edited: {{ note.whenEdited }}</span>
+      <br />
+      <br />
     </div>
   </div>
 </template>
@@ -57,7 +60,7 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { createNote } from "../models/note.model";
-
+import { JsonBinApi } from "../JsonBinApi";
 export default Vue.extend({
   name: "TestComponent",
 
@@ -84,4 +87,9 @@ export default Vue.extend({
     }
   }
 });
+
+(async () => {
+  const dupa = await JsonBinApi.getNotes();
+  console.log(dupa);
+})();
 </script>
