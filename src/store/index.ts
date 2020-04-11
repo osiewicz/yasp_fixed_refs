@@ -43,6 +43,13 @@ export default new Vuex.Store({
         state.notes.findIndex(note => note.id === noteId),
         1
       );
+    },
+    editNote(state, updatedNote: Note) {
+      state.notes = [
+        ...state.notes.map(note =>
+          note.id !== updatedNote.id ? note : { ...note, ...updatedNote }
+        )
+      ];
     }
   },
   actions: {
@@ -57,6 +64,9 @@ export default new Vuex.Store({
     },
     commitDeleteNote({ commit }, noteId: string) {
       commit("deleteNote", noteId);
+    },
+    commitEditNote({ commit }, note: Note) {
+      commit("editNote", note);
     }
   },
   modules: {}
