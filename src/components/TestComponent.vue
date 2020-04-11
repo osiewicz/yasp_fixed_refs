@@ -62,6 +62,34 @@
       <span>When edited: {{ note.whenEdited }}</span
       ><br /><br />
     </div>
+    <div>
+      Search phrase:
+      <input
+        style="border: 1px solid black; margin: 5px"
+        v-model="searchPhrase"
+      /><br />
+      <button
+        style="border: 1px solid black; margin: 5px; padding: 5px"
+        v-on:click="searchNotes(searchPhrase)"
+      >
+        Search in content and titles</button
+      ><br />
+      <div v-for="note in searchResult" :key="note.id">
+        <span>Note</span><br />
+        <span>Id: {{ note.id }}</span
+        ><br />
+        <span>Title: {{ note.title }}</span
+        ><br />
+        <span>Content: {{ note.content }}</span
+        ><br />
+        <span>Tags: {{ note.tags }}</span
+        ><br />
+        <span>When created: {{ note.whenCreated }}</span
+        ><br />
+        <span>When edited: {{ note.whenEdited }}</span
+        ><br /><br />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,11 +104,21 @@ export default Vue.extend({
   data() {
     return {
       id: "",
-      content: ""
+      content: "",
+      searchPhrase: "",
+      searchResult: []
     };
   },
   computed: {
-    ...mapGetters(["notes", "getNotesCount", "getNoteByIndex", "getNoteById"])
+    ...mapGetters([
+      "notes",
+      "getNotesCount",
+      "getNoteByIndex",
+      "getNoteById",
+      "searchInContents",
+      "searchInTitles",
+      "searchInContentsAndTitles"
+    ])
   },
   methods: {
     ...mapActions([
@@ -102,6 +140,9 @@ export default Vue.extend({
         editableNote.content = content;
         this.commitEditNote(editableNote);
       } else console.log("There is no note with given id");
+    },
+    searchNotes(phrase: string) {
+      this.searchResult = this.searchInContentsAndTitles(phrase);
     }
   }
 });

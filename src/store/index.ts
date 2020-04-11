@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { Note } from "@/models/note.model";
+import _ from "lodash";
 
 Vue.use(Vuex);
 
@@ -26,6 +27,18 @@ export default new Vuex.Store({
     },
     getNoteById: state => (id: string) => {
       return state.notes.find(note => note.id === id);
+    },
+    searchInContents: state => (searchPhrase: string) => {
+      return state.notes.filter(note => _.includes(note.content, searchPhrase));
+    },
+    searchInTitles: state => (searchPhrase: string) => {
+      return state.notes.filter(note => _.includes(note.title, searchPhrase));
+    },
+    searchInContentsAndTitles: (state, getters) => (searchPhrase: string) => {
+      return _.union(
+        getters.searchInContents(searchPhrase),
+        getters.searchInTitles(searchPhrase)
+      );
     }
   },
   mutations: {
