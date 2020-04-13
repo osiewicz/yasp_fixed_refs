@@ -39,6 +39,16 @@ export default new Vuex.Store({
         getters.searchInContents(searchPhrase),
         getters.searchInTitles(searchPhrase)
       );
+    },
+    groupByTags: state => (tags: string[]) => {
+      return state.notes.filter(
+        note => _.difference(tags, note.tags).length < tags.length
+      );
+    },
+    groupByTagsStrict: state => (tags: string[]) => {
+      return state.notes.filter(note =>
+        tags.every(tag => note.tags.includes(tag))
+      );
     }
   },
   mutations: {
