@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { Note } from "@/models/note.model";
+import _ from "lodash";
 
 Vue.use(Vuex);
 
@@ -26,6 +27,28 @@ export default new Vuex.Store({
     },
     getNoteById: state => (id: string) => {
       return state.notes.find(note => note.id === id);
+    },
+    searchInContents: state => (searchPhrase: string) => {
+      return state.notes.filter(note => _.includes(note.content, searchPhrase));
+    },
+    searchInTitles: state => (searchPhrase: string) => {
+      return state.notes.filter(note => _.includes(note.title, searchPhrase));
+    },
+    searchInContentsAndTitles: (state, getters) => (searchPhrase: string) => {
+      return _.union(
+        getters.searchInContents(searchPhrase),
+        getters.searchInTitles(searchPhrase)
+      );
+    },
+    groupByTags: state => (tags: string[]) => {
+      return state.notes.filter(
+        note => _.difference(tags, note.tags).length < tags.length
+      );
+    },
+    groupByTagsStrict: state => (tags: string[]) => {
+      return state.notes.filter(note =>
+        tags.every(tag => note.tags.includes(tag))
+      );
     }
   },
   mutations: {
@@ -43,6 +66,13 @@ export default new Vuex.Store({
         state.notes.findIndex(note => note.id === noteId),
         1
       );
+    },
+    editNote(state, updatedNote: Note) {
+      state.notes = [
+        ...state.notes.map(note =>
+          note.id !== updatedNote.id ? note : { ...note, ...updatedNote }
+        )
+      ];
     }
   },
   actions: {
@@ -57,6 +87,9 @@ export default new Vuex.Store({
     },
     commitDeleteNote({ commit }, noteId: string) {
       commit("deleteNote", noteId);
+    },
+    commitEditNote({ commit }, note: Note) {
+      commit("editNote", note);
     }
   },
   modules: {}
