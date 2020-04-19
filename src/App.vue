@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-img
         alt="Yasp Logo"
-        class="shrink mr-2"
+        class="shrink mr-2 hidden-sm-and-down"
         contain
         src="./assets/yasp_logo.png"
         transition="scale-transition"
