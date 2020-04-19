@@ -206,8 +206,8 @@ export default Vue.extend({
   }
 });
 
-(async () => {
-  const dupa = await JsonBinApi.getNotes();
-  console.log(dupa);
-})();
+// (async () => {
+//   const dupa = await JsonBinApi.getNotes();
+//   console.log(dupa);
+// })();
 </script>
