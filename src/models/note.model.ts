@@ -14,8 +14,14 @@ export const createNote = ({
   title = "Note title",
   content = "Note content",
   tags = ["Tag1", "Tag2"],
-  whenCreated = new Date("2020-01-01").toISOString(),
-  whenEdited = new Date("2020-03-03").toISOString()
+  whenCreated = new Date("2020-01-01")
+    .toISOString()
+    .slice(0, -5)
+    .replace("T", ", "),
+  whenEdited = new Date("2020-03-03")
+    .toISOString()
+    .slice(0, -5)
+    .replace("T", ", ")
 }: Partial<Note> = {}): Note => {
   return {
     id,
