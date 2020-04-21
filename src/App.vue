@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app clipped-left color="amber">
+    <v-app-bar app clipped-left color="orange">
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-img
         alt="Yasp Logo"
@@ -32,7 +32,7 @@
             </v-col>
           </v-row>
           <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
-          <v-list-item v-else :key="i" link>
+          <v-list-item v-else :key="'A' + i" link>
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -44,10 +44,8 @@
           </v-list-item>
         </template>
         <template v-for="(tag, i) in allTags">
-          <v-list-item :key="i" link>
-            <v-list-item-action
-              ><v-icon>arrow_right</v-icon></v-list-item-action
-            >
+          <v-list-item :key="'B' + i" link>
+            <v-list-item-action><v-icon>label</v-icon></v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class="grey--text">
                 {{ tag }}
@@ -67,11 +65,9 @@
             </v-list-item-content>
           </v-list-item>
         </template>
-      </v-list>
-      <v-list dense class="grey lighten-4">
         <template v-for="(item, i) in itemsBottom">
           <v-divider v-if="item.divider" :key="i" dark class="my-4" />
-          <v-list-item v-else :key="i" link>
+          <v-list-item v-else :key="'C' + i" link>
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -89,9 +85,14 @@
       <v-container fluid class="grey lighten-4 fill-height">
         <v-row justify="center" align="center">
           <v-col>
-            <TestComponent></TestComponent>
+            <CreateNote></CreateNote>
           </v-col>
         </v-row>
+        <!-- <v-row justify="center" align="center">
+          <v-col>
+            <TestComponent></TestComponent>
+          </v-col>
+        </v-row> -->
       </v-container>
     </v-content>
   </v-app>
@@ -100,12 +101,15 @@
 <script lang="ts">
 import Vue from "vue";
 import TestComponent from "./components/TestComponent.vue";
+import CreateNote from "./components/create/CreateNote.vue";
 import { mapGetters } from "vuex";
+
 export default Vue.extend({
   name: "App",
   components: {
-    TestComponent
+    CreateNote
   },
+
   props: {
     source: String
   },
