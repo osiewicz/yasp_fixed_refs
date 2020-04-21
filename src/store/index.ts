@@ -49,6 +49,9 @@ export default new Vuex.Store({
       return state.notes.filter(note =>
         tags.every(tag => note.tags.includes(tag))
       );
+    },
+    allTags: state => {
+      return _.union(_.flattenDeep(state.notes.map(note => note.tags)));
     }
   },
   mutations: {
