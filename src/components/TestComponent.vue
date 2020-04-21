@@ -54,7 +54,9 @@
       Reset notes state
     </button>
     <br />
-    <span style="margin: 5px">Notes count: {{ getNotesCount }}</span>
+    <span style="margin: 5px">Notes count: {{ getNotesCount }}</span
+    ><br />
+    <span style="margin: 5px">Tags distinct: {{ allTags }}</span>
     <div v-for="note in notes" :key="note.id">
       <span>Note</span><br />
       <span>Id: {{ note.id }}</span
@@ -163,7 +165,8 @@ export default Vue.extend({
       "searchInTitles",
       "searchInContentsAndTitles",
       "groupByTags",
-      "groupByTagsStrict"
+      "groupByTagsStrict",
+      "allTags"
     ])
   },
   methods: {
