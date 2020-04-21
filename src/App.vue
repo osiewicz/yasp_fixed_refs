@@ -12,6 +12,7 @@
       />
       <v-spacer />
       <v-text-field
+        :disabled="this.$route.path !== '/'"
         solo-inverted
         flat
         hide-details
@@ -32,7 +33,7 @@
             </v-col>
           </v-row>
           <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
-          <v-list-item v-else :key="'A' + i" link>
+          <v-list-item v-else :key="'A' + i" link :to="item.link">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -85,14 +86,9 @@
       <v-container fluid class="grey lighten-4 fill-height">
         <v-row justify="center" align="center">
           <v-col>
-            <CreateNote></CreateNote>
+            <router-view />
           </v-col>
         </v-row>
-        <!-- <v-row justify="center" align="center">
-          <v-col>
-            <TestComponent></TestComponent>
-          </v-col>
-        </v-row> -->
       </v-container>
     </v-content>
   </v-app>
@@ -100,15 +96,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import TestComponent from "./components/TestComponent.vue";
-import CreateNote from "./components/create/CreateNote.vue";
 import { mapGetters } from "vuex";
 
 export default Vue.extend({
   name: "App",
-  components: {
-    CreateNote
-  },
+  components: {},
 
   props: {
     source: String
@@ -117,8 +109,8 @@ export default Vue.extend({
     return {
       drawer: null,
       itemsTop: [
-        { icon: "add", text: "Create new note" },
-        { icon: "lightbulb_outline", text: "Notes" },
+        { icon: "add", text: "Create new note", link: "/create" },
+        { icon: "lightbulb_outline", text: "Notes", link: "/" },
         { divider: true },
         { heading: "Notes by tags:" }
       ],
