@@ -104,7 +104,6 @@ import { mapGetters } from "vuex";
 
 export default Vue.extend({
   name: "App",
-
   components: {
     TestComponent
   },
