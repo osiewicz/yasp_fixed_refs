@@ -1,9 +1,12 @@
 <template>
   <v-container>
     <h1 align="center">
-      Create new note <v-icon color="black">event_note</v-icon>
+      Create new note
+      <v-icon color="black">event_note</v-icon>
     </h1>
-    <br /><br /><br />
+    <br />
+    <br />
+    <br />
     <v-row>
       <v-col>
         <v-form ref="form">
@@ -38,8 +41,7 @@
               @paste="updateTags"
               color="orange"
               hint="Press enter after typing each tag to add it to list"
-            >
-            </v-combobox>
+            ></v-combobox>
           </v-flex>
           <v-layout align-end justify-end>
             <v-btn
@@ -59,6 +61,7 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { v4 as uuidv4 } from "uuid";
+import { JsonBinApi } from "../../JsonBinApi";
 
 export default Vue.extend({
   name: "CreateNote",
@@ -86,7 +89,7 @@ export default Vue.extend({
         });
       });
     },
-    addNote() {
+    async addNote() {
       const date = new Date();
       this.commitNote({
         ...this.note,
@@ -100,6 +103,9 @@ export default Vue.extend({
           .slice(0, -5)
           .replace("T", ", ")
       });
+      //handle result
+      const result = await JsonBinApi.addNote(this.note);
+      console.log(result);
       this.note.title = "";
       this.note.content = "";
       this.note.tags = [];

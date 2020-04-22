@@ -27,9 +27,7 @@
         <template v-for="(item, i) in itemsTop">
           <v-row v-if="item.heading" :key="i" align="center">
             <v-col>
-              <v-subheader v-if="item.heading">
-                {{ item.heading }}
-              </v-subheader>
+              <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
             </v-col>
           </v-row>
           <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
@@ -38,19 +36,21 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ item.text }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                item.text
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
         <template v-for="(tag, i) in allTags">
           <v-list-item :key="'B' + i" link>
-            <v-list-item-action><v-icon>label</v-icon></v-list-item-action>
+            <v-list-item-action>
+              <v-icon>label</v-icon>
+            </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ tag }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                tag
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -60,9 +60,9 @@
               <v-icon>error</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                There are no tags yet!
-              </v-list-item-title>
+              <v-list-item-title class="grey--text"
+                >There are no tags yet!</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -73,9 +73,9 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ item.text }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                item.text
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -96,7 +96,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { JsonBinApi } from "./JsonBinApi";
 
 export default Vue.extend({
   name: "App",
@@ -121,8 +122,26 @@ export default Vue.extend({
       ]
     };
   },
+  methods: {
+    ...mapActions(["commitMultipleNotes"])
+  },
   computed: {
     ...mapGetters(["allTags"])
+  },
+  async mounted() {
+    //this.commitMultipleNotes([]);
+    const notesId = await JsonBinApi.getNotes();
+    //TODO handle req
+    if (notesId.success === true) {
+      const notes = await Promise.all(
+        notesId.records.map(async (noteId: string) => {
+          const result = await JsonBinApi.readNote(noteId.id);
+          return result.payload;
+        })
+      );
+
+      this.commitMultipleNotes(notes);
+    }
   }
 });
 </script>
