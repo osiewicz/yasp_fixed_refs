@@ -91,7 +91,7 @@ export default Vue.extend({
     },
     async addNote() {
       const date = new Date();
-      this.commitNote({
+      const note = {
         ...this.note,
         id: uuidv4(),
         whenCreated: new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -102,9 +102,10 @@ export default Vue.extend({
           .toISOString()
           .slice(0, -5)
           .replace("T", ", ")
-      });
+      };
+      this.commitNote(note);
       //handle result
-      const result = await JsonBinApi.addNote(this.note);
+      const result = await JsonBinApi.addNote(note);
       console.log(result);
       this.note.title = "";
       this.note.content = "";
