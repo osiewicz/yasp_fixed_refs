@@ -45,7 +45,7 @@
           </v-flex>
           <v-layout align-end justify-end>
             <v-btn
-              :disabled="note.title.length == 0 && note.content.length == 0"
+              :disabled="note.title.length == 0 || note.content.length == 0"
               color="orange"
               @click="addNote()"
               >Add note</v-btn
