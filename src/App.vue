@@ -12,7 +12,7 @@
       />
       <v-spacer />
       <v-text-field
-        :disabled="this.$route.path !== '/'"
+        :disabled="this.$route.path === '/create'"
         solo-inverted
         flat
         hide-details
@@ -43,7 +43,7 @@
           </v-list-item>
         </template>
         <template v-for="(tag, i) in allTags">
-          <v-list-item :key="'B' + i" link>
+          <v-list-item :key="'B' + i" link :to="'/tags/' + tag">
             <v-list-item-action>
               <v-icon>label</v-icon>
             </v-list-item-action>

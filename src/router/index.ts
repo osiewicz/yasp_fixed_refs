@@ -18,6 +18,11 @@ const routes = [
     component: CreateNote
   },
   {
+    path: "/tags/:tag",
+    name: "Tag",
+    component: Notes
+  },
+  {
     path: "/testComponent",
     name: "TestComponent",
     component: TestComponent
