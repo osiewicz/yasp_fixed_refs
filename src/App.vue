@@ -18,6 +18,7 @@
         hide-details
         label="Search"
         prepend-inner-icon="search"
+        v-model="searchBox"
       />
       <v-spacer />
     </v-app-bar>
@@ -86,7 +87,7 @@
       <v-container fluid class="grey lighten-4 fill-height">
         <v-row justify="center" align="center">
           <v-col>
-            <router-view />
+            <router-view v-bind:searchBox="searchBox" />
           </v-col>
         </v-row>
       </v-container>
@@ -177,7 +178,8 @@ export default Vue.extend({
         { divider: true },
         { icon: "settings", text: "Settings", dialog: false },
         { icon: "help", text: "About Yasp", dialog: false }
-      ]
+      ],
+      searchBox: ""
     };
   },
   methods: {
@@ -211,6 +213,12 @@ export default Vue.extend({
         this.commitMultipleNotes(notes);
         this.commitSync();
       }
+    }
+  },
+  watch: {
+    // eslint-disable-next-line
+    $route(to, from) {
+      this.searchBox = "";
     }
   }
 });
