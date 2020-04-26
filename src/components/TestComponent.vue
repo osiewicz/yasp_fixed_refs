@@ -140,7 +140,6 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { createNote } from "../models/note.model";
-import { JsonBinApi } from "../JsonBinApi";
 export default Vue.extend({
   name: "TestComponent",
 
@@ -208,9 +207,4 @@ export default Vue.extend({
     }
   }
 });
-
-// (async () => {
-//   const dupa = await JsonBinApi.getNotes();
-//   console.log(dupa);
-// })();
 </script>

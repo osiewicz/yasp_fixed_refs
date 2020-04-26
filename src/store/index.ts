@@ -7,13 +7,15 @@ Vue.use(Vuex);
 
 export const getDefaultState = () => {
   return {
-    notes: Array<Note>()
+    notes: Array<Note>(),
+    synced: false
   };
 };
 
 export default new Vuex.Store({
   state: {
-    notes: Array<Note>()
+    notes: Array<Note>(),
+    synced: false
   },
   getters: {
     notes: state => {
@@ -50,8 +52,30 @@ export default new Vuex.Store({
         tags.every(tag => note.tags.includes(tag))
       );
     },
+    getTotalTagsCount: state => {
+      return _.flattenDeep(state.notes.map(note => note.tags)).length;
+    },
     allTags: state => {
       return _.union(_.flattenDeep(state.notes.map(note => note.tags)));
+    },
+    synced: state => {
+      return state.synced;
+    },
+    getTotalLengthOfContents: state => {
+      return state.notes.map(note => note.content).join("").length;
+    },
+    getTotalLengthOfTitles: state => {
+      return state.notes.map(note => note.title).join("").length;
+    },
+    getTotalLengthOfTags: state => {
+      return _.flattenDeep(state.notes.map(note => note.tags)).join("").length;
+    },
+    getTotalLength: (state, getters) => {
+      return (
+        getters.getTotalLengthOfContents +
+        getters.getTotalLengthOfTitles +
+        getters.getTotalLengthOfTags
+      );
     }
   },
   mutations: {
@@ -76,6 +100,9 @@ export default new Vuex.Store({
           note.id !== updatedNote.id ? note : { ...note, ...updatedNote }
         )
       ];
+    },
+    confirmSync: state => {
+      state.synced = true;
     }
   },
   actions: {
@@ -93,6 +120,9 @@ export default new Vuex.Store({
     },
     commitEditNote({ commit }, note: Note) {
       commit("editNote", note);
+    },
+    commitSync({ commit }) {
+      commit("confirmSync");
     }
   },
   modules: {}
