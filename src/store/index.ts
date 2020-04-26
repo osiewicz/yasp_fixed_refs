@@ -31,10 +31,14 @@ export default new Vuex.Store({
       return state.notes.find(note => note.id === id);
     },
     searchInContents: state => (searchPhrase: string) => {
-      return state.notes.filter(note => _.includes(note.content, searchPhrase));
+      return state.notes.filter(note =>
+        _.includes(note.content.toLowerCase(), searchPhrase.toLowerCase())
+      );
     },
     searchInTitles: state => (searchPhrase: string) => {
-      return state.notes.filter(note => _.includes(note.title, searchPhrase));
+      return state.notes.filter(note =>
+        _.includes(note.title.toLowerCase(), searchPhrase.toLowerCase())
+      );
     },
     searchInContentsAndTitles: (state, getters) => (searchPhrase: string) => {
       return _.union(
@@ -75,6 +79,31 @@ export default new Vuex.Store({
         getters.getTotalLengthOfContents +
         getters.getTotalLengthOfTitles +
         getters.getTotalLengthOfTags
+      );
+    },
+    searchInGroupedByTagsContents: (state, getters) => (
+      tags: string[],
+      searchPhrase: string
+    ) => {
+      return (getters.groupByTags(tags) as Note[]).filter(note =>
+        _.includes(note.content.toLowerCase(), searchPhrase.toLowerCase())
+      );
+    },
+    searchInGroupedByTagsTitles: (state, getters) => (
+      tags: string[],
+      searchPhrase: string
+    ) => {
+      return (getters.groupByTags(tags) as Note[]).filter(note =>
+        _.includes(note.title.toLowerCase(), searchPhrase.toLowerCase())
+      );
+    },
+    searchInGroupedByTagsContentsAndTitles: (state, getters) => (
+      tags: string[],
+      searchPhrase: string
+    ) => {
+      return _.union(
+        getters.searchInGroupedByTagsContents(tags, searchPhrase),
+        getters.searchInGroupedByTagsTitles(tags, searchPhrase)
       );
     }
   },
