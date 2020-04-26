@@ -68,7 +68,7 @@
         </template>
         <template v-for="(item, i) in itemsBottom">
           <v-divider v-if="item.divider" :key="i" dark class="my-4" />
-          <v-list-item v-else :key="'C' + i" link>
+          <v-list-item v-else :key="'C' + i" link @click="item.dialog = true">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -91,6 +91,50 @@
         </v-row>
       </v-container>
     </v-content>
+
+    <v-dialog v-model="itemsBottom[2].dialog" width="100vh">
+      <v-card>
+        <v-card-title class="display-1 pb-1 justify-center">
+          About YASP:
+        </v-card-title>
+        <v-card-text class="text-center pb-1">
+          Yasp is a modern single-page application (SPA) website which lets
+          users from all around the globe write down their notes. Yasp offers
+          fluid yet intuitive user experience for all of your personal notes.
+        </v-card-text>
+        <v-card-text class="headline text-center pb-1" style="color: black">
+          Dev team:
+        </v-card-text>
+        <v-card-text style="display: flex" class="justify-center pb-1">
+          <ul style="textAlign: left; listStylePosition: inside">
+            <li>Piotr O. - Team leader</li>
+            <li>Marcin S. - Frontend developer</li>
+            <li>Bartosz L. - Designer</li>
+            <li>Sebastian R. - API</li>
+          </ul>
+        </v-card-text>
+        <v-card-text class="headline text-center pb-1" style="color: black">
+          Current session stats:
+        </v-card-text>
+        <v-card-text class="text-center pb-1">
+          Number of notes: {{ getNotesCount }} <br />Number of unique tags:
+          {{ allTags.length }} <br />Total tag count: {{ getTotalTagsCount }}
+          <br />Total number of characters in notes contents:
+          {{ getTotalLengthOfContents }} <br />Total number of characters in
+          notes titles: {{ getTotalLengthOfTitles }} <br />
+          Total number of characters in notes tags: {{ getTotalLengthOfTags }}
+          <br />
+          Total number of characters in notes: {{ getTotalLength }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="black" text @click="itemsBottom[2].dialog = false">
+            Close
+          </v-btn>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -118,15 +162,24 @@ export default Vue.extend({
       itemsBottom: [
         { divider: true },
         { icon: "settings", text: "Settings" },
-        { icon: "help", text: "About Yasp" }
+        { icon: "help", text: "About Yasp", dialog: false }
       ]
     };
   },
   methods: {
-    ...mapActions(["commitMultipleNotes"])
+    ...mapActions(["commitMultipleNotes", "resetNotesState", "commitSync"])
   },
   computed: {
-    ...mapGetters(["allTags"])
+    ...mapGetters([
+      "allTags",
+      "getNotesCount",
+      "synced",
+      "getTotalTagsCount",
+      "getTotalLengthOfContents",
+      "getTotalLengthOfTitles",
+      "getTotalLengthOfTags",
+      "getTotalLength"
+    ])
   },
   async mounted() {
     //this.commitMultipleNotes([]);
@@ -140,7 +193,10 @@ export default Vue.extend({
         })
       );
 
-      this.commitMultipleNotes(notes);
+      if (!this.synced) {
+        this.commitMultipleNotes(notes);
+        this.commitSync();
+      }
     }
   }
 });
