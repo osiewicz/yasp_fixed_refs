@@ -92,6 +92,20 @@
       </v-container>
     </v-content>
 
+    <v-dialog v-model="itemsBottom[1].dialog" width="100vh">
+      <v-card>
+        <v-card-title class="display-1 pb-1 justify-center">
+          Settings:
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="black" text @click="itemsBottom[1].dialog = false">
+            Close
+          </v-btn>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="itemsBottom[2].dialog" width="100vh">
       <v-card>
         <v-card-title class="display-1 pb-1 justify-center">
@@ -161,7 +175,7 @@ export default Vue.extend({
       ],
       itemsBottom: [
         { divider: true },
-        { icon: "settings", text: "Settings" },
+        { icon: "settings", text: "Settings", dialog: false },
         { icon: "help", text: "About Yasp", dialog: false }
       ]
     };
