@@ -1,10 +1,11 @@
 import ky from "ky";
 import { appConfig } from "../appConfig";
+import { Note } from "../src/models/note.model";
 
 const { secretKey, collectionId } = appConfig.jsonBin;
 
 export class JsonBinApi {
-  static addNote = async (payload: string) => {
+  static addNote = async (payload: Note) => {
     try {
       return await ky
         .post("https://api.jsonbin.io/b", {
@@ -24,7 +25,7 @@ export class JsonBinApi {
     }
   };
 
-  static updateNote = async (noteId: string, payload: string) => {
+  static updateNote = async (noteId: string, payload: Note) => {
     try {
       return await ky
         .put(`https://api.jsonbin.io/b/${noteId}`, {
