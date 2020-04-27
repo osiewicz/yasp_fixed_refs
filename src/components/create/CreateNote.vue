@@ -71,7 +71,8 @@ export default Vue.extend({
       note: {
         title: "",
         content: "",
-        tags: Array<string>()
+        tags: Array<string>(),
+        jsonbinId: ""
       },
       search: ""
     };
@@ -80,7 +81,7 @@ export default Vue.extend({
     ...mapGetters(["allTags"])
   },
   methods: {
-    ...mapActions(["commitNote"]),
+    ...mapActions(["commitNote", "commitEditNote"]),
     updateTags() {
       this.$nextTick(() => {
         this.note.tags.push(...this.search.split(","));
@@ -107,6 +108,12 @@ export default Vue.extend({
       //handle result
       const result = await JsonBinApi.addNote(note);
       console.log(result);
+      this.commitEditNote({ ...note, jsonbinId: result.id });
+      const result2 = await JsonBinApi.updateNote(result.id, {
+        ...note,
+        jsonbinId: result.id
+      });
+      console.log(result2);
       this.note.title = "";
       this.note.content = "";
       this.note.tags = [];

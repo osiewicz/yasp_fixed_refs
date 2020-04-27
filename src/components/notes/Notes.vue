@@ -415,7 +415,9 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { Note } from "@/models/note.model";
+import { JsonBinApi } from "../../JsonBinApi";
 
+/* eslint-disable */
 export default Vue.extend({
   name: "Notes",
 
@@ -433,7 +435,8 @@ export default Vue.extend({
         content: "",
         tags: "",
         whenCreated: "",
-        whenEdited: ""
+        whenEdited: "",
+        jsonbinId: ""
       },
       search: ""
     };
@@ -452,9 +455,7 @@ export default Vue.extend({
   methods: {
     ...mapActions(["commitEditNote", "commitDeleteNote"]),
     viewClicked(note: Note) {
-      // eslint-disable-next-line
       Object.assign((this as any).viewedNote, note);
-      // eslint-disable-next-line
       (this as any).dialog = true;
     },
     getTwoTags(tags: string[]) {
@@ -464,29 +465,37 @@ export default Vue.extend({
     },
     updateTags() {
       this.$nextTick(() => {
-        // eslint-disable-next-line
         (this as any).viewedNote.tags.push(...(this as any).search.split(","));
         this.$nextTick(() => {
-          // eslint-disable-next-line
           (this as any).search = "";
         });
       });
     },
-    addEditedNote() {
+    async addEditedNote() {
       const date = new Date();
       const editedNote = {
-        // eslint-disable-next-line
         ...(this as any).viewedNote,
         whenEdited: new Date(date.getTime() - date.getTimezoneOffset() * 60000)
           .toISOString()
           .slice(0, -5)
           .replace("T", ", ")
       };
-      // eslint-disable-next-line
+      if (editedNote.jsonbinId.length != 0) {
+        const result = await JsonBinApi.updateNote(
+          editedNote.jsonbinId,
+          editedNote
+        );
+        console.log(result);
+      }
       (this as any).commitEditNote(editedNote);
     },
-    deleteNote() {
-      // eslint-disable-next-line
+    async deleteNote() {
+      if ((this as any).viewedNote.jsonbinId.length != 0) {
+        const result = await JsonBinApi.deleteNote(
+          (this as any).viewedNote.jsonbinId
+        );
+        console.log(result);
+      }
       (this as any).commitDeleteNote((this as any).viewedNote);
     }
   }
