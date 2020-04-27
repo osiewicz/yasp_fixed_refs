@@ -7,6 +7,7 @@ export interface Note {
   tags: string[];
   whenCreated: string;
   whenEdited: string;
+  jsonbinId: string;
 }
 
 export const createNote = ({
@@ -21,7 +22,8 @@ export const createNote = ({
   whenEdited = new Date("2020-03-03")
     .toISOString()
     .slice(0, -5)
-    .replace("T", ", ")
+    .replace("T", ", "),
+  jsonbinId = ""
 }: Partial<Note> = {}): Note => {
   return {
     id,
@@ -29,6 +31,7 @@ export const createNote = ({
     content,
     tags,
     whenCreated,
-    whenEdited
+    whenEdited,
+    jsonbinId
   };
 };

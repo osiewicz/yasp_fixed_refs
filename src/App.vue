@@ -208,8 +208,10 @@ export default Vue.extend({
   async mounted() {
     //this.commitMultipleNotes([]);
     const notesId = await JsonBinApi.getNotes();
+    console.log(notesId);
     //TODO handle req
     if (notesId.success === true) {
+      console.log(notesId.records);
       const notes = await Promise.all(
         notesId.records.map(async (noteId: { id: string }) => {
           const result = await JsonBinApi.readNote(noteId.id);
