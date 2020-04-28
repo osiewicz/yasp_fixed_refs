@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app clipped-left color="orange">
+    <v-app-bar app clipped-left :color="appColor">
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-img
         alt="Yasp Logo"
@@ -93,16 +93,29 @@
       </v-container>
     </v-content>
 
-    <v-dialog v-model="itemsBottom[1].dialog" width="100vh">
+    <v-dialog persistent v-model="itemsBottom[1].dialog" width="50vh">
       <v-card>
         <v-card-title class="display-1 pb-1 justify-center"
           >Settings:</v-card-title
         >
+        <v-card-text class="headline text-center pb-1" style="color: black"
+          >Change app color:</v-card-text
+        >
+        <v-card-actions class="pb-3"
+          ><v-spacer /><v-btn depressed color="orange" @click="resetColor()"
+            >Default color</v-btn
+          ><v-spacer
+        /></v-card-actions>
+        <div style="display: flex" class="justify-center pb-1">
+          <v-color-picker
+            mode="hexa"
+            :hide-mode-switch="true"
+            v-model="color"
+          ></v-color-picker>
+        </div>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="black" text @click="itemsBottom[1].dialog = false"
-            >Close</v-btn
-          >
+          <v-btn color="black" text @click="saveColor()">Close</v-btn>
           <v-spacer />
         </v-card-actions>
       </v-card>
@@ -191,7 +204,21 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapActions(["commitMultipleNotes", "resetNotesState", "commitSync"])
+    ...mapActions([
+      "commitMultipleNotes",
+      "resetNotesState",
+      "commitSync",
+      "commitChangeColor"
+    ]),
+    saveColor() {
+      // eslint-disable-next-line
+      (this as any).itemsBottom[1].dialog = false;
+      localStorage.setItem("color", this.appColor);
+    },
+    resetColor() {
+      // eslint-disable-next-line
+      (this as any).commitChangeColor("#FF9800");
+    }
   },
   computed: {
     ...mapGetters([
@@ -202,14 +229,25 @@ export default Vue.extend({
       "getTotalLengthOfContents",
       "getTotalLengthOfTitles",
       "getTotalLengthOfTags",
-      "getTotalLength"
-    ])
+      "getTotalLength",
+      "appColor"
+    ]),
+    color: {
+      get() {
+        return this.$store.state.appColor;
+      },
+      set(value) {
+        this.$store.commit("changeColor", value);
+      }
+    }
   },
   async mounted() {
-    //this.commitMultipleNotes([]);
-
+    const color = localStorage.getItem("color");
+    if (color) {
+      // eslint-disable-next-line
+      (this as any).commitChangeColor(color);
+    }
     const notesId = await JsonBinApi.getNotes();
-
     console.log(notesId);
     //TODO handle req
     if (notesId.success === true) {
@@ -223,15 +261,18 @@ export default Vue.extend({
       );
 
       if (!this.synced) {
-        this.commitMultipleNotes(notes);
-        this.commitSync();
+        // eslint-disable-next-line
+        (this as any).commitMultipleNotes(notes);
+        // eslint-disable-next-line
+        (this as any).commitSync();
       }
     }
   },
   watch: {
     // eslint-disable-next-line
     $route(to, from) {
-      this.searchBox = "";
+      // eslint-disable-next-line
+      (this as any).searchBox = "";
     }
   }
 });

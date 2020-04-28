@@ -1,7 +1,6 @@
 <template>
   <v-layout>
     <v-container fluid grid-list-md>
-      {{ searchBox }}
       <v-layout row wrap>
         <template v-if="!routeTag && searchBox.length == 0">
           <v-flex xs12 md6 lg3 v-for="(note, n) in notes" :key="n">
@@ -25,7 +24,7 @@
                       class="mb-3 ml-1"
                       v-for="(tag, r) in getTwoTags(note.tags)"
                       :key="'R' + r"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon
                       ><span
@@ -36,7 +35,7 @@
                     <v-chip
                       v-if="note.tags.length > 3"
                       class="mb-3 ml-1"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon>
                       {{ note.tags.length - 2 }} more
@@ -51,7 +50,10 @@
               <v-card-actions>
                 <template>
                   <v-layout align-end justify-end>
-                    <v-btn text color="orange" @click.stop="viewClicked(note)"
+                    <v-btn
+                      text
+                      :color="appColor"
+                      @click.stop="viewClicked(note)"
                       >View</v-btn
                     >
                   </v-layout>
@@ -88,7 +90,7 @@
                       class="mb-3 ml-1"
                       v-for="(tag, r) in getTwoTags(note.tags)"
                       :key="'R' + r"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon
                       ><span
@@ -99,7 +101,7 @@
                     <v-chip
                       v-if="note.tags.length > 3"
                       class="mb-3 ml-1"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon>
                       {{ note.tags.length - 2 }} more
@@ -114,7 +116,10 @@
               <v-card-actions>
                 <template>
                   <v-layout align-end justify-end>
-                    <v-btn text color="orange" @click.stop="viewClicked(note)"
+                    <v-btn
+                      text
+                      :color="appColor"
+                      @click.stop="viewClicked(note)"
                       >View</v-btn
                     >
                   </v-layout>
@@ -147,7 +152,7 @@
                     >
                   </div>
                   <div>
-                    <v-chip class="mb-3 ml-1" color="orange">
+                    <v-chip class="mb-3 ml-1" :color="appColor">
                       &nbsp; <v-icon left>label</v-icon
                       ><span
                         style="max-width: 10ch; overflow: hidden; textOverflow: ellipsis"
@@ -157,7 +162,7 @@
                     <v-chip
                       v-if="note.tags.length >= 2"
                       class="mb-3 ml-1"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon>
                       {{ note.tags.length - 1 }} more
@@ -172,7 +177,10 @@
               <v-card-actions>
                 <template>
                   <v-layout align-end justify-end>
-                    <v-btn text color="orange" @click.stop="viewClicked(note)"
+                    <v-btn
+                      text
+                      :color="appColor"
+                      @click.stop="viewClicked(note)"
                       >View</v-btn
                     >
                   </v-layout>
@@ -208,7 +216,7 @@
                     >
                   </div>
                   <div>
-                    <v-chip class="mb-3 ml-1" color="orange">
+                    <v-chip class="mb-3 ml-1" :color="appColor">
                       &nbsp; <v-icon left>label</v-icon
                       ><span
                         style="max-width: 10ch; overflow: hidden; textOverflow: ellipsis"
@@ -218,7 +226,7 @@
                     <v-chip
                       v-if="note.tags.length >= 2"
                       class="mb-3 ml-1"
-                      color="orange"
+                      :color="appColor"
                     >
                       &nbsp; <v-icon left>label</v-icon>
                       {{ note.tags.length - 1 }} more
@@ -233,7 +241,10 @@
               <v-card-actions>
                 <template>
                   <v-layout align-end justify-end>
-                    <v-btn text color="orange" @click.stop="viewClicked(note)"
+                    <v-btn
+                      text
+                      :color="appColor"
+                      @click.stop="viewClicked(note)"
                       >View</v-btn
                     >
                   </v-layout>
@@ -267,7 +278,7 @@
                 class="mb-3 ml-1"
                 v-for="(tag, t) in viewedNote.tags"
                 :key="'T' + t"
-                color="orange"
+                :color="appColor"
               >
                 &nbsp; <v-icon left>label</v-icon>{{ tag }}
               </v-chip>
@@ -313,7 +324,7 @@
                 filled
                 v-model="viewedNote.title"
                 label="Note title (required)"
-                color="orange"
+                :color="appColor"
                 :rules="[v => !!v || 'Title is required']"
               ></v-text-field>
               <v-textarea
@@ -323,7 +334,7 @@
                 name="note-content"
                 label="Note content (required)"
                 rows="5"
-                color="orange"
+                :color="appColor"
                 :rules="[v => !!v || 'Content is required']"
               ></v-textarea>
               <v-flex xs12>
@@ -338,7 +349,7 @@
                   :search-input.sync="search"
                   @keyup.tab="updateTags"
                   @paste="updateTags"
-                  color="orange"
+                  :color="appColor"
                   hint="Press enter after typing each tag to add it to list"
                 ></v-combobox>
               </v-flex>
@@ -446,7 +457,8 @@ export default Vue.extend({
       "notes",
       "groupByTags",
       "searchInContentsAndTitles",
-      "searchInGroupedByTagsContentsAndTitles"
+      "searchInGroupedByTagsContentsAndTitles",
+      "appColor"
     ]),
     routeTag() {
       return this.$route.params.tag;
