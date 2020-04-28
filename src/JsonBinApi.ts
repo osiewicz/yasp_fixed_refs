@@ -45,7 +45,7 @@ export class JsonBinApi {
   static readNote = async (noteId: string) => {
     try {
       return await ky
-        .get(`https://api.jsonbin.io/b/${noteId}`, {
+        .get(`https://api.jsonbin.io/b/${noteId}/latest`, {
           headers: {
             "secret-key": secretKey
           }

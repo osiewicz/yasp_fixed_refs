@@ -107,8 +107,8 @@ export default Vue.extend({
       this.commitNote(note);
       //handle result
       const result = await JsonBinApi.addNote(note);
-      console.log(result);
       this.commitEditNote({ ...note, jsonbinId: result.id });
+      console.log(result.id, { ...note, jsonbinId: result.id });
       const result2 = await JsonBinApi.updateNote(result.id, {
         ...note,
         jsonbinId: result.id

@@ -37,9 +37,9 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ item.text }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                item.text
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -49,9 +49,9 @@
               <v-icon>label</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ tag }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                tag
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -74,9 +74,9 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title class="grey--text">
-                {{ item.text }}
-              </v-list-item-title>
+              <v-list-item-title class="grey--text">{{
+                item.text
+              }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -207,7 +207,9 @@ export default Vue.extend({
   },
   async mounted() {
     //this.commitMultipleNotes([]);
+
     const notesId = await JsonBinApi.getNotes();
+
     console.log(notesId);
     //TODO handle req
     if (notesId.success === true) {
@@ -215,6 +217,7 @@ export default Vue.extend({
       const notes = await Promise.all(
         notesId.records.map(async (noteId: { id: string }) => {
           const result = await JsonBinApi.readNote(noteId.id);
+          console.log(result);
           return result.payload;
         })
       );
