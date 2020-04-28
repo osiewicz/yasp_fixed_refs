@@ -77,7 +77,8 @@ export class JsonBinApi {
           headers: {
             "secret-key": secretKey,
             "collection-id": collectionId
-          }
+          },
+          timeout: 60000
         })
         .json();
     } catch (err) {

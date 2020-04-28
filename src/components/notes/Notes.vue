@@ -508,7 +508,7 @@ export default Vue.extend({
         );
         console.log(result);
       }
-      (this as any).commitDeleteNote((this as any).viewedNote);
+      (this as any).commitDeleteNote((this as any).viewedNote.id);
     }
   }
 });

@@ -27,7 +27,7 @@
       <v-list dense class="grey lighten-4">
         <template v-for="(item, i) in itemsTop">
           <v-row v-if="item.heading" :key="i" align="center">
-            <v-col>
+            <v-col class="pt-0">
               <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
             </v-col>
           </v-row>
@@ -46,7 +46,7 @@
         <template v-for="(tag, i) in allTags">
           <v-list-item :key="'B' + i" link :to="'/tags/' + tag">
             <v-list-item-action>
-              <v-icon>label</v-icon>
+              <v-icon :color="appColor">label</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class="grey--text">{{
@@ -247,7 +247,10 @@ export default Vue.extend({
       // eslint-disable-next-line
       (this as any).commitChangeColor(color);
     }
+    const t0 = performance.now();
     const notesId = await JsonBinApi.getNotes();
+    const t1 = performance.now();
+    console.log("Get notes took " + (t1 - t0) + " milliseconds.");
     console.log(notesId);
     //TODO handle req
     if (notesId.success === true) {
