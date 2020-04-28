@@ -8,14 +8,16 @@ Vue.use(Vuex);
 export const getDefaultState = () => {
   return {
     notes: Array<Note>(),
-    synced: false
+    synced: false,
+    appColor: "#FF9800"
   };
 };
 
 export default new Vuex.Store({
   state: {
     notes: Array<Note>(),
-    synced: false
+    synced: false,
+    appColor: "#FF9800"
   },
   getters: {
     notes: state => {
@@ -105,6 +107,9 @@ export default new Vuex.Store({
         getters.searchInGroupedByTagsContents(tags, searchPhrase),
         getters.searchInGroupedByTagsTitles(tags, searchPhrase)
       );
+    },
+    appColor: state => {
+      return state.appColor;
     }
   },
   mutations: {
@@ -132,6 +137,9 @@ export default new Vuex.Store({
     },
     confirmSync: state => {
       state.synced = true;
+    },
+    changeColor(state, color: string) {
+      state.appColor = color;
     }
   },
   actions: {
@@ -152,6 +160,9 @@ export default new Vuex.Store({
     },
     commitSync({ commit }) {
       commit("confirmSync");
+    },
+    commitChangeColor({ commit }, color: string) {
+      commit("changeColor", color);
     }
   },
   modules: {}

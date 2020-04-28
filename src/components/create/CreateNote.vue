@@ -14,7 +14,7 @@
             filled
             v-model="note.title"
             label="Note title (required)"
-            color="orange"
+            :color="appColor"
             :rules="[v => !!v || 'Title is required']"
           ></v-text-field>
           <v-textarea
@@ -24,7 +24,7 @@
             name="note-content"
             label="Note content (required)"
             rows="5"
-            color="orange"
+            :color="appColor"
             :rules="[v => !!v || 'Content is required']"
           ></v-textarea>
           <v-flex xs12>
@@ -39,14 +39,14 @@
               :search-input.sync="search"
               @keyup.tab="updateTags"
               @paste="updateTags"
-              color="orange"
+              :color="appColor"
               hint="Press enter after typing each tag to add it to list"
             ></v-combobox>
           </v-flex>
           <v-layout align-end justify-end>
             <v-btn
               :disabled="note.title.length == 0 || note.content.length == 0"
-              color="orange"
+              :color="appColor"
               @click="addNote()"
               >Add note</v-btn
             >
@@ -78,7 +78,7 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapGetters(["allTags"])
+    ...mapGetters(["allTags", "appColor"])
   },
   methods: {
     ...mapActions(["commitNote", "commitEditNote"]),
@@ -120,6 +120,7 @@ export default Vue.extend({
       this.search = "";
       // eslint-disable-next-line
       (this as any).$refs.form.resetValidation();
+      this.$router.push({ path: "/" });
     }
   }
 });
