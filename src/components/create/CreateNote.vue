@@ -108,19 +108,17 @@ export default Vue.extend({
       //handle result
       const result = await JsonBinApi.addNote(note);
       this.commitEditNote({ ...note, jsonbinId: result.id });
-      console.log(result.id, { ...note, jsonbinId: result.id });
-      const result2 = await JsonBinApi.updateNote(result.id, {
+      await JsonBinApi.updateNote(result.id, {
         ...note,
         jsonbinId: result.id
       });
-      console.log(result2);
       this.note.title = "";
       this.note.content = "";
       this.note.tags = [];
       this.search = "";
       // eslint-disable-next-line
       (this as any).$refs.form.resetValidation();
-      this.$router.push({ path: "/" });
+      this.$router.push({ name: "Home", query: { createdTitle: note.title } });
     }
   }
 });

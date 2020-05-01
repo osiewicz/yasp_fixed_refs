@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import TestComponent from "../components/TestComponent.vue";
 import CreateNote from "../components/create/CreateNote.vue";
 import Notes from "../components/notes/Notes.vue";
 
@@ -21,12 +20,12 @@ const routes = [
     path: "/tags/:tag",
     name: "Tag",
     component: Notes
-  },
-  {
-    path: "/testComponent",
-    name: "TestComponent",
-    component: TestComponent
   }
+  // {
+  //   path: "/testComponent",
+  //   name: "TestComponent",
+  //   component: TestComponent
+  // }
 ];
 
 const router = new VueRouter({

@@ -2,6 +2,11 @@
   <v-layout>
     <v-container fluid grid-list-md>
       <v-layout row wrap>
+        <template v-if="getNotesCount == 0">
+          <v-spacer />
+          <div class="grey--text">There are no notes.</div>
+          <v-spacer />
+        </template>
         <template v-if="!routeTag && searchBox.length == 0">
           <v-flex xs12 md6 lg3 v-for="(note, n) in notes" :key="n">
             <v-card>
@@ -417,6 +422,48 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-snackbar
+          top
+          v-model="snackbarCreate"
+          color="success"
+          label="success"
+          value="success"
+          :timeout="5000"
+          style="marginTop: 70px"
+        >
+          <v-spacer />
+          Created note
+          <span class="font-weight-bold ml-1">{{ createdTitle }}</span>
+          <v-spacer />
+        </v-snackbar>
+        <v-snackbar
+          top
+          v-model="snackbarEdit"
+          color="success"
+          label="success"
+          value="success"
+          :timeout="5000"
+          style="marginTop: 70px"
+        >
+          <v-spacer />
+          edited note
+          <span class="font-weight-bold ml-1">{{ viewedNote.title }}</span>
+          <v-spacer />
+        </v-snackbar>
+        <v-snackbar
+          top
+          v-model="snackbarDelete"
+          color="success"
+          label="success"
+          value="success"
+          :timeout="5000"
+          style="marginTop: 70px"
+        >
+          <v-spacer />
+          Deleted note
+          <span class="font-weight-bold ml-1">{{ viewedNote.title }}</span>
+          <v-spacer />
+        </v-snackbar>
       </v-layout>
     </v-container>
   </v-layout>
@@ -449,12 +496,17 @@ export default Vue.extend({
         whenEdited: "",
         jsonbinId: ""
       },
-      search: ""
+      search: "",
+      createdTitle: "",
+      snackbarCreate: false,
+      snackbarEdit: false,
+      snackbarDelete: false
     };
   },
   computed: {
     ...mapGetters([
       "notes",
+      "getNotesCount",
       "groupByTags",
       "searchInContentsAndTitles",
       "searchInGroupedByTagsContentsAndTitles",
@@ -497,18 +549,25 @@ export default Vue.extend({
           editedNote.jsonbinId,
           editedNote
         );
-        console.log(result);
       }
       (this as any).commitEditNote(editedNote);
+      (this as any).snackbarEdit = true;
     },
     async deleteNote() {
       if ((this as any).viewedNote.jsonbinId.length != 0) {
         const result = await JsonBinApi.deleteNote(
           (this as any).viewedNote.jsonbinId
         );
-        console.log(result);
       }
       (this as any).commitDeleteNote((this as any).viewedNote.id);
+      (this as any).snackbarDelete = true;
+    }
+  },
+  mounted() {
+    if (this.$route.query.createdTitle) {
+      (this as any).createdTitle = this.$route.query.createdTitle.toString();
+      (this as any).snackbarCreate = true;
+      this.$router.replace("/");
     }
   }
 });
