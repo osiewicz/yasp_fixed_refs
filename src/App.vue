@@ -171,6 +171,32 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar
+      top
+      v-model="snackbar"
+      color="success"
+      label="success"
+      value="success"
+      :timeout="5000"
+      style="marginTop: 70px"
+    >
+      <v-spacer />
+      Notes load success
+      <v-spacer />
+    </v-snackbar>
+    <v-snackbar
+      top
+      v-model="snackbarError"
+      color="error"
+      label="error"
+      value="error"
+      :timeout="5000"
+      style="marginTop: 70px"
+    >
+      <v-spacer />
+      Notes load failed
+      <v-spacer />
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -200,7 +226,9 @@ export default Vue.extend({
         { icon: "settings", text: "Settings", dialog: false },
         { icon: "help", text: "About Yasp", dialog: false }
       ],
-      searchBox: ""
+      searchBox: "",
+      snackbar: false,
+      snackbarError: false
     };
   },
   methods: {
@@ -265,10 +293,15 @@ export default Vue.extend({
 
       if (!this.synced) {
         // eslint-disable-next-line
+        (this as any).snackbar = true;
+        // eslint-disable-next-line
         (this as any).commitMultipleNotes(notes);
         // eslint-disable-next-line
         (this as any).commitSync();
       }
+    } else {
+      // eslint-disable-next-line
+      (this as any).snackbarError = true;
     }
   },
   watch: {

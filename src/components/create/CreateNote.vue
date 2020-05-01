@@ -120,7 +120,7 @@ export default Vue.extend({
       this.search = "";
       // eslint-disable-next-line
       (this as any).$refs.form.resetValidation();
-      this.$router.push({ path: "/" });
+      this.$router.push({ name: "Home", query: { createdTitle: note.title } });
     }
   }
 });
