@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app clipped-left :color="appColor">
+    <v-app-bar
+      app
+      clipped-left
+      :color="appColor"
+      :src="header ? 'https://picsum.photos/1920/1080?random' : null"
+    >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-img
         alt="Yasp Logo"
@@ -23,8 +28,14 @@
       <v-spacer />
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
-      <v-list dense class="grey lighten-4">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      clipped
+      color="list grey lighten-4"
+      :src="list ? 'https://picsum.photos/1080/256?random' : null"
+    >
+      <v-list dense :class="list ? null : 'grey lighten-4'">
         <template v-for="(item, i) in itemsTop">
           <v-row v-if="item.heading" :key="i" align="center">
             <v-col class="pt-0">
@@ -99,6 +110,25 @@
           >Settings:</v-card-title
         >
         <v-card-text class="headline text-center pb-1" style="color: black"
+          >Customize using random photos:</v-card-text
+        >
+        <v-container>
+          <v-row align="center" justify="center">
+            <v-checkbox
+              v-model="header"
+              label="Get random photo on header"
+              class="mt-0"
+            ></v-checkbox>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-checkbox
+              v-model="list"
+              label="Get random photo on navbar"
+              class="mt-0"
+            ></v-checkbox>
+          </v-row>
+        </v-container>
+        <v-card-text class="headline text-center pb-1" style="color: black"
           >Change app color:</v-card-text
         >
         <v-card-actions class="pb-3"
@@ -115,7 +145,7 @@
         </div>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="black" text @click="saveColor()">Close</v-btn>
+          <v-btn color="black" text @click="saveSettings()">Close</v-btn>
           <v-spacer />
         </v-card-actions>
       </v-card>
@@ -238,10 +268,12 @@ export default Vue.extend({
       "commitSync",
       "commitChangeColor"
     ]),
-    saveColor() {
+    saveSettings() {
       // eslint-disable-next-line
       (this as any).itemsBottom[1].dialog = false;
       localStorage.setItem("color", this.appColor);
+      localStorage.setItem("header", this.randomHeader);
+      localStorage.setItem("list", this.randomList);
     },
     resetColor() {
       // eslint-disable-next-line
@@ -258,7 +290,9 @@ export default Vue.extend({
       "getTotalLengthOfTitles",
       "getTotalLengthOfTags",
       "getTotalLength",
-      "appColor"
+      "appColor",
+      "randomHeader",
+      "randomList"
     ]),
     color: {
       get() {
@@ -267,26 +301,43 @@ export default Vue.extend({
       set(value) {
         this.$store.commit("changeColor", value);
       }
+    },
+    header: {
+      get() {
+        return this.$store.state.randomHeader;
+      },
+      set() {
+        this.$store.commit("changeHeader");
+      }
+    },
+    list: {
+      get() {
+        return this.$store.state.randomList;
+      },
+      set() {
+        this.$store.commit("changeList");
+      }
     }
   },
   async mounted() {
     const color = localStorage.getItem("color");
+    const header = localStorage.getItem("header");
+    const list = localStorage.getItem("list");
     if (color) {
       // eslint-disable-next-line
       (this as any).commitChangeColor(color);
     }
-    const t0 = performance.now();
+    if (header === "true") {
+      this.$store.commit("changeHeader");
+    }
+    if (list === "true") {
+      this.$store.commit("changeList");
+    }
     const notesId = await JsonBinApi.getNotes();
-    const t1 = performance.now();
-    console.log("Get notes took " + (t1 - t0) + " milliseconds.");
-    console.log(notesId);
-    //TODO handle req
     if (notesId.success === true) {
-      console.log(notesId.records);
       const notes = await Promise.all(
         notesId.records.map(async (noteId: { id: string }) => {
           const result = await JsonBinApi.readNote(noteId.id);
-          console.log(result);
           return result.payload;
         })
       );

@@ -549,7 +549,6 @@ export default Vue.extend({
           editedNote.jsonbinId,
           editedNote
         );
-        console.log(result);
       }
       (this as any).commitEditNote(editedNote);
       (this as any).snackbarEdit = true;
@@ -559,7 +558,6 @@ export default Vue.extend({
         const result = await JsonBinApi.deleteNote(
           (this as any).viewedNote.jsonbinId
         );
-        console.log(result);
       }
       (this as any).commitDeleteNote((this as any).viewedNote.id);
       (this as any).snackbarDelete = true;

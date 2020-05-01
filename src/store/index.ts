@@ -9,7 +9,9 @@ export const getDefaultState = () => {
   return {
     notes: Array<Note>(),
     synced: false,
-    appColor: "#FF9800"
+    appColor: "#FF9800",
+    randomHeader: false,
+    randomList: false
   };
 };
 
@@ -17,7 +19,9 @@ export default new Vuex.Store({
   state: {
     notes: Array<Note>(),
     synced: false,
-    appColor: "#FF9800"
+    appColor: "#FF9800",
+    randomHeader: false,
+    randomList: false
   },
   getters: {
     notes: state => {
@@ -110,6 +114,12 @@ export default new Vuex.Store({
     },
     appColor: state => {
       return state.appColor;
+    },
+    randomHeader: state => {
+      return state.randomHeader;
+    },
+    randomList: state => {
+      return state.randomList;
     }
   },
   mutations: {
@@ -140,6 +150,12 @@ export default new Vuex.Store({
     },
     changeColor(state, color: string) {
       state.appColor = color;
+    },
+    changeHeader: state => {
+      state.randomHeader = !state.randomHeader;
+    },
+    changeList: state => {
+      state.randomList = !state.randomList;
     }
   },
   actions: {
