@@ -13,7 +13,7 @@ Yasp is a modern single-page application (SPA) website which lets users from all
 
 
 ## Meet the team:
-*   Piotr - _**Team leader**_
-*   Marcin - _**Team coordinator, Developer**_
-*   Bartosz - _**Developer**_
-*   Sebastian - _**Developer**_
+*   Piotr O.- _**Team leader**_
+*   Marcin S.- _**Frontend developer**_
+*   Bartosz L.- _**Designer**_
+*   Sebastian R.- _**API engineer**_
